@@ -1,4 +1,4 @@
-from torus import torus
+from torus import Torus
 
 values = [
     [0,0,1,1,0,0,1,0,0,0,1,1,0,1,1,1],
