@@ -75,7 +75,7 @@ class Torus():
 
     # return number of 1's in binary representation of num
     def _popcount(self, num):
-        return f'num:b'.count('1')
+        return f'{num:b}'.count('1')
 
     # list -> int
     def _list_to_num(self, line):
