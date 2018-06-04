@@ -70,12 +70,12 @@ class Torus():
     # file -> bytearray
     def _read_to_array(self, f):
         num = int.from_bytes(f.read(self._bytes(self.s)), 'big')
-        line = format(num, 'b').rjust(self.s, '0')
+        line = f'{num:0{self.s}b}'
         return bytearray(map(int, line))
 
     # return number of 1's in binary representation of num
     def _popcount(self, num):
-        return format(num, 'b').count('1')
+        return f'num:b'.count('1')
 
     # list -> int
     def _list_to_num(self, line):
@@ -129,8 +129,8 @@ class Torus():
             lines = [self._read_to_array(old) for _ in range(self.r)]
             lines = list(''.join(map(str, line)) for line in zip(*lines))
             self._write_from_array(f, self._bytes(self.r), lines)
-        print('transposed %dx%d torus in %.3fs' %
-            (self.r, self.s, time.perf_counter() - start_time))
+        end_time = time.perf_counter() - start_time
+        print(f'transposed {self.r}x{self.s} torus in {end_time:.3f}s')
         os.remove(self.temp)
 
         self.r, self.s = self.s, self.r
@@ -154,7 +154,7 @@ class Torus():
         seed: A list containing a binary de Bruijn sequence.
             For even column sums, seed is an order-n de Bruijn sequence that
                 starts with n zeroes.
-            For odd column sums, seed is an order-(n-1) de Bruijn sequene that
+            For odd column sums, seed is an order-(n-1) de Bruijn sequence that
                 starts with n-1 zeroes.
             If seed is None, a default seed will be generated from debruijn().
 
@@ -231,8 +231,8 @@ class Torus():
                     self._write_from_num(
                         f, self._bytes(self.s * num_copies), result)
                     result.clear()
-                    print('row %d/%d time %.3fs' % 
-                        (row + 2, num_rows, time.perf_counter() - start_time))
+                    end_time = time.perf_counter() - start_time
+                    print(f'row {row+2}/{num_rows} time {end_time:.3f}s')
         os.remove(self.temp)
 
         self.r = num_rows
@@ -286,7 +286,7 @@ class Torus():
             # Repeat each bit square_size times
             if square_size > 1:
                 next_data = int.from_bytes(next_data, 'big')
-                next_data = format(next_data, 'b').rjust(img_width, '0')
+                next_data = f'{next_data:0{img_width}b}'
                 next_data = ''.join(i * square_size for i in next_data)
                 next_data = (int(next_data, 2)
                     .to_bytes(square_size * self._bytes(img_width), 'big'))
@@ -315,4 +315,4 @@ class Torus():
                     if tile_width == tile_height == 1:
                         img.save(name)
                     else:
-                        img.save('%s_%d_%d%s' % (base, h+1, w+1, ext))
+                        img.save(f'{base}_{h+1}_{w+1}{ext}')
