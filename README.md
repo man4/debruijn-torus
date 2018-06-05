@@ -47,7 +47,7 @@ The file `torus.py` contains comprehensive documentation for each of these metho
 ## Features
 * The torus is stored on disk and processed in chunks, so that only part of the torus is in RAM at a given time. As a result, you can work with a torus even if it's too large to fit in memory.
 * The values of the torus are stored compactly as raw bytes on disk. Each value takes up only 1 bit of disk space.
-* Bit operations are heavily used to speed up the construction. On my laptop, `sample-large.py` finishes in just under a second, and `sample-6x6.py` takes about 25 minutes. This is about 50x faster than a similar version without bit operations!
+* Bit operations are heavily used to speed up the construction. On my laptop, `sample-large.py` finishes in just under a second, and `sample-6x6.py` takes about 20 minutes. This is about 50x faster than a similar version without bit operations!
 
 ## References
 [1] C.T. Fan, S.M. Fan, S.L. Ma, and M.K. Siu. "On de Bruijn arrays," *Ars Combinatoria*, Vol. 19A (1985), pp. 205-213.

@@ -127,10 +127,9 @@ class Torus():
         shutil.copyfile(self.file, self.temp)
         with open(self.file, 'w+b') as f, open(self.temp, 'rb') as old:
             lines = [self._read_to_array(old) for _ in range(self.r)]
-            lines = list(''.join(map(str, line)) for line in zip(*lines))
-            self._write_from_array(f, self._bytes(self.r), lines)
-        end_time = time.perf_counter() - start_time
-        print(f'transposed {self.r}x{self.s} torus in {end_time:.3f}s')
+            self._write_from_array(f, self._bytes(self.r), zip(*lines))
+        total_time = time.perf_counter() - start_time
+        print(f'transposed {self.r}x{self.s} torus in {total_time:.3f}s')
         os.remove(self.temp)
 
         self.r, self.s = self.s, self.r
@@ -231,8 +230,8 @@ class Torus():
                     self._write_from_num(
                         f, self._bytes(self.s * num_copies), result)
                     result.clear()
-                    end_time = time.perf_counter() - start_time
-                    print(f'row {row+2}/{num_rows} time {end_time:.3f}s')
+                    total_time = time.perf_counter() - start_time
+                    print(f'row {row+2}/{num_rows} time {total_time:.3f}s')
         os.remove(self.temp)
 
         self.r = num_rows
