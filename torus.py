@@ -36,7 +36,7 @@ class Torus():
         self.s = len(values[0])
         self.m = m
         self.n = n
-        if self.r * self.s != 2**(self.m * self.n):
+        if self.r * self.s != 2 ** (self.m * self.n):
             raise ValueError('Dimension mismatch')
 
         self.row_sums = 0
@@ -129,7 +129,7 @@ class Torus():
             lines = [self._read_to_array(old) for _ in range(self.r)]
             self._write_from_array(f, self._bytes(self.r), zip(*lines))
         total_time = time.perf_counter() - start_time
-        print(f'transposed {self.r}x{self.s} torus in {total_time:.3f}s')
+        print(f'Transposed {self.r}x{self.s} torus in {total_time:.3f}s')
         os.remove(self.temp)
 
         self.r, self.s = self.s, self.r
@@ -204,11 +204,15 @@ class Torus():
         self.row_sums = self._popcount(next_line) % 2
         self.col_sums = next_line
 
+        if MODE == EVEN:
+            num_rows = self.r
+            num_copies = 2 ** self.n
+        else:
+            num_rows = 2 * self.r
+            num_copies = 2 ** (self.n - 1)
+
         shutil.copyfile(self.file, self.temp)
         with open(self.file, 'w+b') as f, open(self.temp, 'rb') as old:
-            num_rows = self.r if MODE == EVEN else 2 * self.r
-            num_copies = 1 << self.n if MODE == EVEN else 1 << (self.n - 1)
-
             for row in range(num_rows - 1):
                 if row == self.r: # only occurs when MODE == ODD
                     old.seek(0)
@@ -226,7 +230,7 @@ class Torus():
                 self.col_sums ^= next_line
 
                 # Periodically write result to file
-                if len(result) % min(num_rows, 1 << 10) == 0:
+                if len(result) % min(num_rows, 2 ** 10) == 0:
                     self._write_from_num(
                         f, self._bytes(self.s * num_copies), result)
                     result.clear()
